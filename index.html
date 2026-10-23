@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>دهاء | لعبة التحدي الثقافي</title>
+  <meta name="description" content="دهاء — لعبة ثقافية جماعية تفاعلية للجمعات والاستراحات. اختر 6 فئات وتحدَّ أصحابك.">
+  <meta name="theme-color" content="#F3EADC">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Reem+Kufi:wght@500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="brand" id="brandHome" aria-label="دهاء — الرئيسية">
+        <!-- ضع لوجو اللعبة في assets/ وعدّل المسار هنا (مثال: assets/logo.png) -->
+        <img src="assets/logo.svg" alt="دهاء" class="brand-logo" id="brandLogo">
+      </a>
+
+      <nav class="header-actions">
+        <button class="btn btn-ghost btn-sm hidden" id="btnBackToSetup" type="button">تغيير الفئات</button>
+        <button class="btn btn-ghost btn-sm hidden" id="btnNewGame" type="button">قيم جديد</button>
+        <button class="btn btn-ghost btn-sm" id="btnRules" type="button">طريقة اللعب</button>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== SCREEN 1: SETUP ===================== -->
+    <section class="screen" id="screenSetup">
+      <div class="container">
+        <div class="setup-hero">
+          <p class="eyebrow">الخطوة الأولى</p>
+          <h1>اختر <span class="accent">٦ فئات</span> لتبدأ التحدي</h1>
+          <p class="lead">معرفة وسرعة بديهة فقط — بدون وسائل مساعدة.</p>
+        </div>
+
+        <div class="setup-options">
+          <label class="field">
+            <span>اسم الفريق الأول</span>
+            <input type="text" id="team1Name" maxlength="20" value="الفريق الأول" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>اسم الفريق الثاني</span>
+            <input type="text" id="team2Name" maxlength="20" value="الفريق الثاني" autocomplete="off">
+          </label>
+          <label class="field">
+            <span>مدة المؤقت</span>
+            <select id="timerSeconds">
+              <option value="30">30 ثانية</option>
+              <option value="45">45 ثانية</option>
+              <option value="60" selected>60 ثانية</option>
+              <option value="90">90 ثانية</option>
+              <option value="120">120 ثانية</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="category-grid" id="categoryGrid" role="list"></div>
+      </div>
+
+      <!-- شريط التقدم السفلي -->
+      <div class="setup-bar">
+        <div class="setup-bar-inner">
+          <div class="pick-count">
+            <span class="pick-num" id="pickCount">0</span><span class="pick-total">/ 6</span>
+            <span class="pick-label">فئات مختارة</span>
+          </div>
+          <div class="setup-bar-actions">
+            <button class="btn btn-ghost" id="btnRandom" type="button">اختيار عشوائي</button>
+            <button class="btn btn-primary" id="btnStart" type="button" disabled>ابدأ اللعب</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SCREEN 2: BOARD ===================== -->
+    <section class="screen hidden" id="screenBoard">
+      <div class="container container-wide">
+
+        <div class="scoreboard" id="scoreboard">
+          <div class="team-card" data-team="0">
+            <div class="team-head">
+              <span class="team-name" id="team0Label">الفريق الأول</span>
+              <span class="turn-badge">دوره</span>
+            </div>
+            <div class="team-score" id="team0Score">0</div>
+            <div class="team-controls">
+              <button class="score-btn" data-team="0" data-delta="-100" type="button" aria-label="إنقاص 100">−100</button>
+              <button class="score-btn" data-team="0" data-delta="100" type="button" aria-label="زيادة 100">+100</button>
+            </div>
+          </div>
+
+          <div class="score-center">
+            <span class="score-center-label">الأسئلة المتبقية</span>
+            <span class="score-center-num" id="remainingCount">36</span>
+            <button class="btn btn-ghost btn-sm" id="btnSwitchTurn" type="button">تبديل الدور</button>
+          </div>
+
+          <div class="team-card" data-team="1">
+            <div class="team-head">
+              <span class="team-name" id="team1Label">الفريق الثاني</span>
+              <span class="turn-badge">دوره</span>
+            </div>
+            <div class="team-score" id="team1Score">0</div>
+            <div class="team-controls">
+              <button class="score-btn" data-team="1" data-delta="-100" type="button" aria-label="إنقاص 100">−100</button>
+              <button class="score-btn" data-team="1" data-delta="100" type="button" aria-label="زيادة 100">+100</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="board" id="board"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== QUESTION MODAL ===================== -->
+  <div class="modal hidden" id="questionModal" role="dialog" aria-modal="true" aria-labelledby="qText">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card">
+      <div class="modal-top">
+        <div class="modal-meta">
+          <span class="chip" id="qCategory">الفئة</span>
+          <span class="chip chip-points" id="qPoints">200</span>
+        </div>
+        <button class="icon-btn" id="btnCloseModal" type="button" aria-label="إغلاق">✕</button>
+      </div>
+
+      <div class="timer" id="timer">
+        <svg class="timer-ring" viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="timer-track" cx="60" cy="60" r="52"></circle>
+          <circle class="timer-progress" id="timerProgress" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="timer-value" id="timerValue">60</div>
+      </div>
+
+      <div class="timer-controls">
+        <button class="btn btn-ghost btn-sm" id="btnPause" type="button">إيقاف مؤقت</button>
+        <button class="btn btn-ghost btn-sm" id="btnRestart" type="button">إعادة المؤقت</button>
+      </div>
+
+      <p class="question-text" id="qText">السؤال</p>
+
+      <div class="answer hidden" id="answerBox">
+        <span class="answer-label">الإجابة</span>
+        <p class="answer-text" id="aText"></p>
+      </div>
+
+      <div class="modal-actions" id="revealActions">
+        <button class="btn btn-primary btn-lg" id="btnReveal" type="button">إظهار الإجابة</button>
+      </div>
+
+      <div class="modal-actions hidden" id="awardActions">
+        <p class="award-title">من أجاب صح؟</p>
+        <div class="award-buttons">
+          <button class="btn btn-team" data-award="0" id="award0" type="button">الفريق الأول</button>
+          <button class="btn btn-team" data-award="1" id="award1" type="button">الفريق الثاني</button>
+          <button class="btn btn-ghost" data-award="none" type="button">لا أحد</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== RULES MODAL ===================== -->
+  <div class="modal hidden" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card modal-card-text">
+      <div class="modal-top">
+        <h2 id="rulesTitle">طريقة اللعب</h2>
+        <button class="icon-btn" data-close type="button" aria-label="إغلاق">✕</button>
+      </div>
+      <ol class="rules-list">
+        <li>يختار المضيف <strong>6 فئات</strong> من البطاقات ويكتب أسماء الفريقين.</li>
+        <li>في اللوحة: كل فئة فيها <strong>6 أسئلة</strong> — سؤالان لكل مستوى (200 · 400 · 600).</li>
+        <li>الفريق صاحب الدور يختار سؤالاً، ويبدأ المؤقت تلقائياً.</li>
+        <li>بعد إظهار الإجابة، يحدد المضيف الفريق الذي أجاب صح لتُضاف له النقاط.</li>
+        <li>يمكن تعديل النقاط يدوياً بأزرار ±100 في لوحة النتائج.</li>
+        <li><strong>لا توجد وسائل مساعدة</strong> — لا مضاعفة، لا اتصال بصديق، لا خيارات، ولا بلوك.</li>
+        <li>الأسئلة تتغير في كل قيم ولا تتكرر حتى ينتهي بنك الفئة.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===================== WINNER MODAL ===================== -->
+  <div class="modal hidden" id="winnerModal" role="dialog" aria-modal="true" aria-labelledby="winnerTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-card modal-card-text winner-card">
+      <p class="eyebrow">انتهى القيم</p>
+      <h2 id="winnerTitle">الفائز</h2>
+      <p class="winner-score" id="winnerScore"></p>
+      <div class="modal-actions">
+        <button class="btn btn-primary btn-lg" id="btnPlayAgain" type="button">قيم جديد</button>
+        <button class="btn btn-ghost" data-close type="button">عرض اللوحة</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== CONFIRM MODAL ===================== -->
+  <div class="modal hidden" id="confirmModal" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card modal-card-text">
+      <h2 id="confirmTitle">متأكد؟</h2>
+      <p id="confirmText"></p>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="confirmYes" type="button">نعم</button>
+        <button class="btn btn-ghost" data-close type="button">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/questions.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

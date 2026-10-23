@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 80" role="img" aria-label="دهاء">
+  <!-- لوجو مؤقت — استبدله بلوجو اللعبة الرسمي -->
+  <rect x="150" y="12" width="56" height="56" rx="16" fill="#5E4835"/>
+  <rect x="160" y="22" width="36" height="36" rx="9" fill="none" stroke="#E3D4BD" stroke-width="3"/>
+  <circle cx="178" cy="40" r="7" fill="#B4673F"/>
+  <text x="138" y="54" text-anchor="end" font-family="Reem Kufi, IBM Plex Sans Arabic, Tahoma, sans-serif"
+        font-size="42" font-weight="700" fill="#33281F">دهاء</text>
+</svg>
